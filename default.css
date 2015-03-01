@@ -1,0 +1,106 @@
+body {
+	height:100%;
+	background-color:#000000;
+	overflow:hidden;
+}
+/* old zooming of image
+#background {
+	z-index:-1;
+	margin:0px;
+	padding:0px;
+}
+#background img {
+	min-height:100%;
+	min-width:1024px;
+	width:100%;
+	height:auto;
+	position:fixed;
+	top:0;
+	left:0;
+} */
+#background {
+	z-index:-1;
+	overflow:hidden;
+	margin:0;
+}
+#img_background {
+	/* position:fixed; */
+	/* top:0; */
+	/* left:0; */
+}
+#img_background img {
+	display:block;
+	margin:auto;
+}
+/* #background img {
+	min-height:100%;
+	min-width:1024px;
+	width:100%;
+	height:auto;
+	position:fixed;
+	top:0;
+	left:0;
+} */
+.bgwidth { 
+	width: 100%;
+	display:block;
+	margin:auto;
+}
+.bgheight { 
+	height: 100%;
+	display:block;
+	margin:auto;
+}
+#wrapper {
+	width:100%;
+}
+#clock_overlay {
+	position:absolute;
+	bottom:30px;
+	z-index:10;
+	font-size:6em;
+	color:white;/* #BF9A69; */
+	/* text-shadow: 2px 2px 2px #FFFFFF; */
+	text-shadow: 2px 2px 4px #000000;
+}
+.ghost_button {
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left:10px;
+	padding-right:10px;
+	margin-right:5px;
+	border:2px white solid;
+	cursor:pointer;
+	display:inline-block;
+	color:white;
+	font-weight:bold;
+}
+.ghost_button p {
+	padding:0;
+	margin:0;
+	display:inline-block;
+}
+.ghost_button:hover {
+	color:black;
+	background-color:white;
+	/* text-shadow: 2px 2px 2px #000000; */
+}
+.ghost_button a, a:hover, a:link {
+	cursor:pointer;
+	text-decoration:none;
+	color:white;
+	display:inline-block;
+}
+#slideshow_controls {
+	position:absolute;
+	z-index:10;
+	top:10px;	
+}
+.button_clock {
+	position:absolute;
+	z-index:10;
+	bottom:10px;	
+}
+#button_clock_show {
+	display:none;
+}
