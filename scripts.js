@@ -5,6 +5,15 @@ function getNextBackground() {
 	getNewBackground(false);
 }
 
+function checkIfBlank() {
+	var picSrc = document.getElementById("img_background").src;
+	picSrc = picSrc.search("/blank/blank.png");
+	if(picSrc >= 0) {
+		getNextBackground();
+	}
+	checkBackgroundBlank.stop();
+}
+
 function getNewBackground(initial) {
 	var xmlhttp = null;
 	if (window.XMLHttpRequest) {
@@ -18,10 +27,15 @@ function getNewBackground(initial) {
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState==4 && xmlhttp.status==200) {
 			$('#img_background').hide();
-			document.getElementById("img_background").src=xmlhttp.responseText;
+			var response = xmlhttp.responseText;
+			if(response == "session expired") {
+				console.log('respone was: session expired');
+				document.getElementById("session_expired").innerHTML='<meta http-equiv="refresh" content="0; url=/login.php" />';
+				return;
+			}
+			document.getElementById("img_background").src=response;
 			$(document).ready(function() {
 				$('#img_background').load(function() {
-					console.log('lastBackgroundMode: '+lastBackgroundMode);
 					if(lastBackgroundMode == "showAll") {
 						showAllBackground();
 					}
@@ -187,8 +201,10 @@ function Interval(fn, time) {
 
 var clockUpdate_interval = new Interval('updateClock()', 10000);
 clockUpdate_interval.start();
-var backgroundUpdate_interval = new Interval('getNewBackground(false)', 60000);
+var backgroundUpdate_interval = new Interval('getNewBackground(false)', 300000);
 backgroundUpdate_interval.start();
+var checkBackgroundBlank = new Interval('checkIfBlank()', 1000);
+checkBackgroundBlank.start();
 
 function toggleBackground_change() {
 	if(backgroundUpdate_interval.isRunning()) {
