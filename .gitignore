@@ -6,5 +6,6 @@ tmp
 .DS_Store
 .idea
 /.idea
-/images
 /*.iml
+Thumbs.db
+/images/backgrounds
