@@ -1,35 +1,28 @@
 <!-- This is the main view (the clock) -->
-<!--<div id="clock" ng-style="{'background-image':'url(/images/backgrounds/'+ bgPicture + ')'}">-->
 <div id="clock" ng-style="{'background-image':'url('+ bgPicture + ')'}">
-<!--<div id="clock">-->
-    <!--<img ng-src="/images/backgrounds/default.jpg" />-->
-    <script>
-        // need to get a blank background fix to fix rendering issues
-//        getNewBackground(true);
-//        getNewBackground(false);
-    </script>
     <div id="overlay">
         <div id="slideshow_controls">
-            <div class="ghost_button" onclick="toggleBackground_change();">
-                <p id="toggle_slideshow">Pause Slideshow</p>
+            <div class="ghost_button" ng-click="toggleBackground_change();">
+                <p id="toggle_slideshow">{{toggleBackground_button}}</p>
             </div>
             <div class="ghost_button" ng-click="changeBgPicture()">
                 <p id="slideshow_next">Next</p>
             </div>
-            <div class="ghost_button" onclick="toggleSlideshowView();">
-                <p id="slideshow_view_toggle">Fill Screen</p>
-            </div>
+            <!--<div class="ghost_button" onclick="toggleSlideshowView();">-->
+                <!--<p id="slideshow_view_toggle">Fill Screen</p>-->
+            <!--</div>-->
         </div>
-        <div style="width:auto;">
+        <!--<div style="width:auto;">-->
             <div id="clock_overlay">
-                <script>updateClock();</script>
+                <p>{{clockTime}}</p>
             </div>
-            <div id="button_clock_toggle" class="button_clock ghost_button" onclick="toggleClock();">
-                <p>Hide</p>
-            </div>
-            <div id="button_clock_show" class="button_clock ghost_button" onclick="toggleClock();">
-                <p>Show</p>
-            </div>
-        </div>
+            <!--<div id="button_clock_toggle" class="button_clock ghost_button" onclick="toggleClock();">-->
+                <!--<p>Hide</p>-->
+            <!--</div>-->
+            <!--<div id="button_clock_show" class="button_clock ghost_button" onclick="toggleClock();">-->
+                <!--<p>Show</p>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
+
 </div>
