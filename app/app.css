@@ -32,7 +32,7 @@
 /* Adding old styling */
 body {
   height:100%;
-  /*background-color:#000000;*/
+  background-color:#000000;
   overflow:hidden;
 }
 #center_button {
@@ -77,19 +77,33 @@ body {
 	top:0;
 	left:0;
 } */
-#background {
-  z-index:-1;
-  overflow:hidden;
-  margin:0;
-}
+/*#background {*/
+  /*z-index:-1;*/
+  /*overflow:hidden;*/
+  /*margin:0;*/
+/*}*/
 #img_background {
   /* position:fixed; */
   /* top:0; */
   /* left:0; */
+  background-size: 100% auto;
 }
-#img_background img {
+#clock {
   display:block;
   margin:auto;
+  position:absolute;
+  top:0px;
+  left:0px;
+  bottom:0px;
+  padding:10px;
+  width:100%;
+  /* Make image default to scaling to screen width */
+  background-size: 100% auto;
+  /*background-image: url(/images/backgrounds/default.jpg);*/
+  /*background-color: blue;*/
+  /*z-index: 10;*/
+  /* Make image scale to screen height */
+  /*background-size: auto 100%;*/
 }
 /* #background img {
 	min-height:100%;
