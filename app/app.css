@@ -130,7 +130,7 @@ body {
 }
 @font-face {
   font-family: 'LetsGoDigital';
-  src: url('/app/fonts/LetsGoDigital.ttf');
+  src: url('fonts/LetsGoDigital.ttf');
 }
 #clock_overlay {
   /*position:absolute;*/
