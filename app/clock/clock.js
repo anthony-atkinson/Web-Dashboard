@@ -9,10 +9,10 @@ angular.module('myApp.clock', ['ngRoute'])
   });
 }])
 
-.controller('clock', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
+.controller('clock', ['$scope', '$http', '$interval', '$timeout', function($scope, $http, $interval, $timeout) {
     $scope.bgPicture = '/images/backgrounds/default.jpg';
     $scope.toggleBackground_button = "Pause Slideshow";
-    $scope.clockTime = "15:00";
+    $scope.clockTime = undefined;
 
     $scope.changeBgPicture = function() {
         $http.jsonp('http://pi.anthonyatkinson.info/getRandomBackgroundImageUrl.php?callback=JSON_CALLBACK').
@@ -23,6 +23,7 @@ angular.module('myApp.clock', ['ngRoute'])
     };
 
     var bgTimer = undefined;
+    var clockTimer = undefined;
 
     $scope.stopBgTimer = function(){
         if(angular.isDefined(bgTimer)) {
@@ -40,7 +41,7 @@ angular.module('myApp.clock', ['ngRoute'])
         }
         bgTimer = $interval(function(){
             $scope.changeBgPicture();
-        },10000);
+        },10 * 60000);
         return true;
     };
 
@@ -53,6 +54,27 @@ angular.module('myApp.clock', ['ngRoute'])
         }
     };
 
+    var setupClock = function() {
+        var time_now = new Date();
+        var time_in_one_minute = new Date();
+        time_in_one_minute.setSeconds(0);
+        time_in_one_minute.setMinutes(time_in_one_minute.getMinutes() + 1);
+        var interval_diff = time_in_one_minute.getTime() - time_now.getTime();
+        $timeout(startClock, interval_diff);
+        $scope.clockTime = Date.now();
+    };
+
+    var startClock = function() {
+        // Don't start a new timer if we are already have one running
+        if ( angular.isDefined(clockTimer) ) {
+            return false;
+        }
+        clockTimer = $interval(function(){
+            $scope.clockTime = Date.now();
+        },1000);
+    };
+
+    startClock();
     $scope.changeBgPicture();
     $scope.startBgTimer();
 }]);

@@ -99,6 +99,7 @@ body {
   width:100%;
   /* Make image default to scaling to screen width */
   background-size: 100% auto;
+  background-position: center;
   /*background-image: url(/images/backgrounds/default.jpg);*/
   /*background-color: blue;*/
   /*z-index: 10;*/
