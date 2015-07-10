@@ -1,4 +1,12 @@
 <!-- This is the main view (the clock) -->
+<script>
+//    var app = angular.module('myApp.weather', [
+//        'angular-openweathermap', 'ngSanitize', 'ui.bootstrap'
+//    ]);
+//
+//    app.controller('WeatherCtrl', function($scope) {
+//    });
+</script>
 <div id="clock" ng-style="{'background-image':'url('+ bgPicture + ')'}">
     <div id="overlay">
         <div id="slideshow_controls">
@@ -12,17 +20,17 @@
                 <!--<p id="slideshow_view_toggle">Fill Screen</p>-->
             <!--</div>-->
         </div>
-        <!--<div style="width:auto;">-->
-            <div id="clock_overlay">
-                <p>{{clockTime | date:'HH:mm'}}</p>
-            </div>
-            <!--<div id="button_clock_toggle" class="button_clock ghost_button" onclick="toggleClock();">-->
-                <!--<p>Hide</p>-->
+        <!--<img class="weatherMainImage" ng-src="/images/weather_icons/SVG/{{weatherIcon}}.svg" />-->
+        <div id="weather">
+            <!--<div class="container" ng-controller="WeatherCtrl">-->
+                <angular-openweathermap city-name="Pocatello" offset-hours="-7" offset-minutes="0"></angular-openweathermap>
             <!--</div>-->
-            <!--<div id="button_clock_show" class="button_clock ghost_button" onclick="toggleClock();">-->
-                <!--<p>Show</p>-->
-            <!--</div>-->
-        <!--</div>-->
+            <!--<p class="weather_degrees">76&deg; F</p>-->
+            <!--<p class="weather_description">Party Cloudy</p>-->
+        </div>
+        <div id="clock_overlay">
+            <p>{{clockTime | date:'HH:mm'}}</p>
+        </div>
     </div>
 
 </div>

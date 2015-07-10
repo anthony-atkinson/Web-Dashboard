@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.clock', ['ngRoute'])
+angular.module('myApp.clock', ['ngRoute','angular-openweathermap', 'ngSanitize', 'ui.bootstrap'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/clock', {
@@ -11,6 +11,7 @@ angular.module('myApp.clock', ['ngRoute'])
 
 .controller('clock', ['$scope', '$http', '$interval', '$timeout', function($scope, $http, $interval, $timeout) {
     $scope.bgPicture = '/images/backgrounds/default.jpg';
+    $scope.weatherIcon = '001lighticons-01';
     $scope.toggleBackground_button = "Pause Slideshow";
     $scope.clockTime = undefined;
 
