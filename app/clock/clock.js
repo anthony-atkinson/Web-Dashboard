@@ -10,7 +10,7 @@ angular.module('myApp.clock', ['ngRoute','angular-openweathermap', 'ngSanitize',
 }])
 
 .controller('clock', ['$scope', '$http', '$interval', '$timeout', function($scope, $http, $interval, $timeout) {
-    $scope.bgPicture = '../../images/backgrounds/default.jpg';
+    $scope.bgPicture = 'images/backgrounds/default.jpg';
     $scope.toggleBackground_button = "Pause Slideshow";
     $scope.clockTime = undefined;
 
