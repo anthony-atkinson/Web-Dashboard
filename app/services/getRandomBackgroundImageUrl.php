@@ -13,7 +13,7 @@
 	$files = glob($dir . '/*.*');
 	$file = array_rand($files);
 	
-	$imageurl = "http://{$_SERVER['SERVER_NAME']}/images/".substr($files[$file], strlen($dir)+1);
+	$imageurl = "http://{$_SERVER['SERVER_NAME']}/images/" . rawurlencode(substr($files[$file], strlen($dir)+1) );
 	// $json = {'{$imageurl}'};
 	$json = array(
         'image' => $imageurl
