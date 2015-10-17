@@ -10,7 +10,8 @@ angular.module('myApp.clock', ['ngRoute','angular-openweathermap', 'ngSanitize',
 }])
 
 .controller('clock', ['$scope', '$http', '$interval', '$timeout', function($scope, $http, $interval, $timeout) {
-    $scope.bgPicture = 'images/backgrounds/default.jpg';
+    $scope.bgPicture = '';
+    $scope.bgPictureBlur = '';
     $scope.toggleBackground_button = "Pause Slideshow";
     $scope.clockTime = undefined;
 
@@ -18,6 +19,7 @@ angular.module('myApp.clock', ['ngRoute','angular-openweathermap', 'ngSanitize',
         $http.jsonp('http://pi.anthonyatkinson.info/services/getRandomBackgroundImageUrl.php?callback=JSON_CALLBACK').
             success(function(data) {
               $scope.bgPicture = data.encodedImage[0];
+              $scope.bgPictureBlur = data.bluredImage[0];
             }
         );
     };

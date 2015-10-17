@@ -97,11 +97,6 @@ body {
   background-repeat: no-repeat;
 
   /* Ambilight effects*/
-  filter: blur(1.8vw);
-  -webkit-filter: blur(2vw);
-  -moz-filter: blur(2vw);
-  -o-filter: blur(2vw);
-  -ms-filter: blur(2vw);
   -ms-transform: scale(1.5);
   -webkit-transform: scale(1.5);
   transform: scale(1.5);
