@@ -17,7 +17,7 @@ angular.module('myApp.clock', ['ngRoute','angular-openweathermap', 'ngSanitize',
     $scope.changeBgPicture = function() {
         $http.jsonp('http://pi.anthonyatkinson.info/services/getRandomBackgroundImageUrl.php?callback=JSON_CALLBACK').
             success(function(data) {
-              $scope.bgPicture = data.image;
+              $scope.bgPicture = data.encodedImage[0];
             }
         );
     };

@@ -7,6 +7,7 @@
 //    app.controller('WeatherCtrl', function($scope) {
 //    });
 </script>
+<div id="clock_background_ambilight" ng-style="{'background-image':'url('+ bgPicture + ')'}"></div>
 <div id="clock" ng-style="{'background-image':'url('+ bgPicture + ')'}">
     <div id="overlay">
         <div id="slideshow_controls">
@@ -23,7 +24,7 @@
         <!--<img class="weatherMainImage" ng-src="/images/weather_icons/SVG/{{weatherIcon}}.svg" />-->
         <div id="weather">
             <!--<div class="container" ng-controller="WeatherCtrl">-->
-                <angular-openweathermap city-name="Pocatello" offset-hours="-7" offset-minutes="0"></angular-openweathermap>
+                <!--<angular-openweathermap city-name="Pocatello" offset-hours="-7" offset-minutes="0"></angular-openweathermap>-->
             <!--</div>-->
             <!--<p class="weather_degrees">76&deg; F</p>-->
             <!--<p class="weather_description">Party Cloudy</p>-->
