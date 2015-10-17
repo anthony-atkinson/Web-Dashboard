@@ -10,6 +10,7 @@
 //		die();
 //	}
 	$dir = $_SERVER['DOCUMENT_ROOT'].'/images';
+	$blurDir = $_SERVER['DOCUMENT_ROOT'].'/images/blur';
 	$files = glob($dir . '/*.*');
 	$file = array_rand($files);
 	
@@ -19,14 +20,11 @@
 	$type = pathinfo($files[$file], PATHINFO_EXTENSION);
 	$json = array(
         'imageURL' => $imageurl,
-				'encodedImage' => encodeImageToBase64($files[$file])
+				'encodedImage' => encodeImageToBase64($files[$file]),
+				'bluredImage' => getBluredImage($files[$file], substr($files[$file], strlen($dir)+1), $blurDir)
 	);
 	$json_str = json_encode($json);
-	// echo $json_str;
-	//header("Content-Type: application/json");
-    // echo $_GET['callback'] . '(' . "{'image' : '{$imageurl}'}" . ')';
-    echo $_GET['callback'] . '(' . json_encode($json) . ')';
-	// echo $imageurl;
+	echo $_GET['callback'] . '(' . json_encode($json) . ')';
 	
 	function encodeImageToBase64($path) {
 		$data = file_get_contents($path);
@@ -35,5 +33,29 @@
 		return array(
 			'data:image/' . $type . ';base64,' . $image
 		);
+	}
+	
+	// Path is the full path to the file
+	// Filename is the name of the file
+	// blurPath is the directory where the generated blurred files are stored
+	function getBluredImage($path, $filename, $blurPath) {
+		// If the blurred image has not been generated yet, generate it
+		if( !file_exists($blurPath . '/' . $filename)) {
+			$type = pathinfo($path, PATHINFO_EXTENSION);
+			
+			$image = new Imagick($path);
+			$blurAmount = $image->getImageWidth() * 0.08;
+			
+			$imageWidth = $image->getImageWidth();
+
+			$image->scaleImage($imageWidth * 0.5, 0);
+			$image->blurImage($blurAmount, 40);
+			// brightness, saturation, hue
+			// $image->modulateImage(150, 100, 100);
+			$image->scaleImage($imageWidth, 0);
+			$image->writeImage($blurPath . '/' . $filename);
+		}
+		
+		return encodeImageToBase64($blurPath . '/' . $filename);
 	}
 ?>
