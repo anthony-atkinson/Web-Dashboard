@@ -7,4 +7,4 @@ tmp
 /.idea
 /*.iml
 Thumbs.db
-/app/images/backgrounds
+/public/images/backgrounds

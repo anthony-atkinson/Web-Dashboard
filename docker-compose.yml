@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  app:
+    image: node:lts-alpine
+    user: node
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/home/node/app
+      - /var/share/backgrounds:/home/node/app/public/images/backgrounds
+    ports:
+      - "4000:4000"
+    command: npm start
