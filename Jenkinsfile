@@ -1,7 +1,7 @@
 node('master') {
-    dir('/var/share/backgrounds') {
+    dir('/var/docker/pi-web-interface') {
         stage('Checkout') {
-            scm checkout
+            checkout scm
         }
         stage('Deploy') {
             sh 'docker-compose down'
