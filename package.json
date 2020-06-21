@@ -1,0 +1,24 @@
+{
+  "name": "pi-web-interface",
+  "version": "1.5.0",
+  "description": "Stuff will go here later...",
+  "main": "index.js",
+  "scripts": {
+    "prestart": "npm install",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/atkianth/pi-web-interface.git"
+  },
+  "author": "anthonyatkinson1@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/atkianth/pi-web-interface/issues"
+  },
+  "homepage": "https://gitlab.com/atkianth/pi-web-interface#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "glob": "^7.1.6"
+  }
+}
