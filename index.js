@@ -7,8 +7,12 @@ app.use(express.static('public'));
 
 app.get('/random_background', (req, res) => {
     glob("public/images/backgrounds/**/*", (err, files) => {
-        const fileIndex = Math.floor(Math.random() * files.length);
-        res.send(files[fileIndex].replace("public/", ""));
+        if (files && files.length > 0) {
+            const fileIndex = Math.floor(Math.random() * files.length);
+            res.send(files[fileIndex].replace("public/", ""));
+        } else {
+            res.status(500).send('no files found');
+        }
     });
 });
 
