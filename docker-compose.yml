@@ -5,6 +5,7 @@ services:
     image: node:lts-alpine
     user: node
     working_dir: /home/node/app
+    restart: always
     environment:
       - NODE_ENV=production
     volumes:
