@@ -5,6 +5,7 @@ import {AllInOneWeather, State} from "./models";
 import {plainToClass} from "class-transformer";
 import styles from "./styles";
 import {format} from "date-fns";
+import * as Location from 'expo-location';
 
 const BASE_WEATHER_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = '865e82a956a9bbd334c8562f971a5477';
@@ -21,7 +22,7 @@ export default class Weather extends Component<any, State> {
           const nextUpdate = new Date(new Date().getTime() + FIVE_MINUTES_MS);
           console.log('Next weather update will be at ' +
               format(new Date(nextUpdate), "yyyy-MM-dd HH:mm:ss"));
-          this.setState((prevState, props) => ({
+          this.setState((prevState) => ({
             latitude: prevState.latitude,
             longitude: prevState.longitude,
             weather: plainToClass(AllInOneWeather, data, { excludeExtraneousValues: true }),
@@ -30,25 +31,25 @@ export default class Weather extends Component<any, State> {
         });
   }
 
-  getLocation() {
+  async getLocation() {
     // Get the current position of the user
-    navigator.geolocation.getCurrentPosition(
-        (position) => {
-          this.setState((prevState, props) => ({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-              }), () => {
-                this.getWeather(position.coords.latitude, position.coords.longitude);
-              }
-          );
-        },
-        (error) => this.setState({ error: error.message }),
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    );
+    let {status} = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      this.setState({error: 'Permission to access location was denied'});
+    } else {
+      const loc = await Location.getCurrentPositionAsync();
+      this.setState(() => ({
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+          }), () => {
+            this.getWeather(loc.coords.latitude, loc.coords.longitude);
+          }
+      );
+    }
   }
 
   componentDidMount() {
-    this.getLocation();
+    this.getLocation().then();
   }
 
   componentWillUnmount() {
