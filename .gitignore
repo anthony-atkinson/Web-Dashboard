@@ -1,10 +1,16 @@
-logs/*
-!.gitkeep
-node_modules/
-tmp
-.DS_Store
+node_modules/**/*
+.expo/*
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
 .idea
-/.idea
-/*.iml
-Thumbs.db
-/public/images/backgrounds
+
+# macOS
+.DS_Store
+/.expo/
+/.expo-shared/
