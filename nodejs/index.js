@@ -5,6 +5,7 @@ const glob = require('glob');
 const app = express();
 
 app.use(express.static('public'));
+app.use(express.static('web-build'));
 
 app.get('/random_background', (req, res) => {
   // For local testing with external server uncomment this
