@@ -8,4 +8,5 @@ COPY . .
 RUN npm install && expo build:web
 
 FROM node:lts
+WORKDIR /home/node/app
 COPY --from=0 /tmp/webapp .
