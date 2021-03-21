@@ -2,15 +2,14 @@ version: '2'
 
 services:
   app:
-    image: node:lts-alpine
+    image: local-web-dashboard
     user: node
     working_dir: /home/node/app
-    restart: always
+    restart: unless-stopped
     environment:
       - NODE_ENV=production
     volumes:
-      - ./:/home/node/app
       - /var/share/backgrounds:/home/node/app/public/images/backgrounds
     ports:
       - "4000:4000"
-    command: npm start
+    command: node nodejs/index.js
