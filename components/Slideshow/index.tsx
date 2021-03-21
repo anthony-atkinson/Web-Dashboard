@@ -1,10 +1,9 @@
-import styles from "./Styles";
-import {ImageBackground, Image, View, Dimensions} from "react-native";
+import styles from "./styles";
+import { Image, View } from "react-native";
 import ClockButton from "../ClockButton";
 import React, {useEffect, useState} from "react";
 import {format, add} from "date-fns";
 import Constants from "expo-constants";
-import ScalableImage from 'react-native-scalable-image';
 
 const FIVE_MINUTES = 5 * 60 * 1000;
 const TEXT = {

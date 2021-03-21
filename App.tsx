@@ -1,12 +1,9 @@
 import "reflect-metadata";
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import styles from './screens/Home/Styles';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import {NavigationContainer} from "@react-navigation/native";
 import {createStackNavigator} from "@react-navigation/stack";
 import HomeScreen from "./screens/Home";
-import { useFonts } from 'expo-font';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 

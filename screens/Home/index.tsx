@@ -1,6 +1,6 @@
 import React from 'react';
-import styles from './Styles';
-import {View, Text} from 'react-native';
+import styles from './styles';
+import {View} from 'react-native';
 import Clock from "../../components/Clock";
 import Slideshow from "../../components/Slideshow";
 import Weather from "../../components/Weather";
