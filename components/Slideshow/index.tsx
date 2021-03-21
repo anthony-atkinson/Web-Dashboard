@@ -23,7 +23,7 @@ export default function Slideshow() {
   const updateBackground = (uiTriggered : boolean = false) => {
     console.log('Updating Background');
     fetch(`${BG_URL}/random_background`).then(resp => resp.json()).then(respJson => {
-      const imgUrl = `http://pi.local-only.lan/${respJson.image}`;
+      const imgUrl = `/${respJson.image}`;
       setBackgroundUri(imgUrl);
       if (uiTriggered) {
         clearTimeout(bgTimeout);
