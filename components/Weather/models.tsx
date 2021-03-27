@@ -9,6 +9,10 @@ export interface State {
   weatherUpdateTimeout: any,
 }
 
+export interface ModalProps {
+  showLocationModalAction: Function,
+}
+
 export class AllInOneWeather {
   @Expose()
   timezone: string | undefined;

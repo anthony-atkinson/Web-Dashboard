@@ -1,17 +1,18 @@
 import React, {Component} from 'react';
-import {View, Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {Text} from 'react-native-elements';
-import {AllInOneWeather, State} from "./models";
+import {AllInOneWeather, ModalProps, State} from "./models";
 import {plainToClass} from "class-transformer";
 import styles from "./styles";
 import {format} from "date-fns";
+import {PermissionStatus} from 'unimodules-permissions-interface'
 import * as Location from 'expo-location';
 
 const BASE_WEATHER_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = '865e82a956a9bbd334c8562f971a5477';
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
-export default class Weather extends Component<any, State> {
+export default class Weather extends Component<ModalProps, State> {
   getWeather(lat : number, long : number) {
     console.log('Refreshing weather');
     const url = `${BASE_WEATHER_URL}/onecall?lat=${lat}&lon=${long}&` +
@@ -31,25 +32,43 @@ export default class Weather extends Component<any, State> {
         });
   }
 
+  async maybeDisplayWeatherModal() {
+    const {status} = await Location.getPermissionsAsync();
+    switch (status) {
+      case PermissionStatus.UNDETERMINED:
+        this.props.showLocationModalAction(this.getLocation);
+        break;
+      case PermissionStatus.DENIED:
+        this.setState({error: 'Permission to access location was denied'});
+        break;
+      case PermissionStatus.GRANTED:
+        this.getLocation().then();
+        break;
+    }
+  }
+
   async getLocation() {
-    // Get the current position of the user
-    let {status} = await Location.requestPermissionsAsync();
-    if (status !== 'granted') {
+    const {status} = await Location.getPermissionsAsync();
+    if (status !== PermissionStatus.GRANTED) {
       this.setState({error: 'Permission to access location was denied'});
     } else {
-      const loc = await Location.getCurrentPositionAsync();
-      this.setState(() => ({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-          }), () => {
-            this.getWeather(loc.coords.latitude, loc.coords.longitude);
-          }
+      let loc = (await Location.getLastKnownPositionAsync({ maxAge: 6 * 60 * 60 * 1000 })
+          || await Location.getCurrentPositionAsync()
       );
+      if ( loc && loc.coords) {
+        this.setState(() => ({
+              latitude: loc.coords.latitude,
+              longitude: loc.coords.longitude,
+            }), () => {
+              this.getWeather(loc.coords.latitude, loc.coords.longitude);
+            }
+        );
+      }
     }
   }
 
   componentDidMount() {
-    this.getLocation().then();
+    this.maybeDisplayWeatherModal().then();
   }
 
   componentWillUnmount() {
