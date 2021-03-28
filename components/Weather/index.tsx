@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import {Image, View} from 'react-native';
 import {Text} from 'react-native-elements';
-import {AllInOneWeather, ModalProps, State} from "./models";
+import {AllInOneWeather, State} from "./models";
 import {plainToClass} from "class-transformer";
 import styles from "./styles";
 import {format} from "date-fns";
+import {getLocation, LatLong} from "../../utils/location";
 import {PermissionStatus} from 'unimodules-permissions-interface'
-import * as Location from 'expo-location';
 
 const BASE_WEATHER_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = '865e82a956a9bbd334c8562f971a5477';
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
-export default class Weather extends Component<ModalProps, State> {
+export default class Weather extends Component<any, State> {
   getWeather(lat : number, long : number) {
     console.log('Refreshing weather');
     const url = `${BASE_WEATHER_URL}/onecall?lat=${lat}&lon=${long}&` +
@@ -33,42 +33,33 @@ export default class Weather extends Component<ModalProps, State> {
   }
 
   async maybeDisplayWeatherModal() {
-    const {status} = await Location.getPermissionsAsync();
-    switch (status) {
-      case PermissionStatus.UNDETERMINED:
-        this.props.showLocationModalAction(this.getLocation);
-        break;
-      case PermissionStatus.DENIED:
-        this.setState({error: 'Permission to access location was denied'});
-        break;
-      case PermissionStatus.GRANTED:
-        this.getLocation().then();
-        break;
-    }
-  }
-
-  async getLocation() {
-    const {status} = await Location.getPermissionsAsync();
-    if (status !== PermissionStatus.GRANTED) {
-      this.setState({error: 'Permission to access location was denied'});
-    } else {
-      let loc = (await Location.getLastKnownPositionAsync({ maxAge: 6 * 60 * 60 * 1000 })
-          || await Location.getCurrentPositionAsync()
-      );
-      if ( loc && loc.coords) {
-        this.setState(() => ({
-              latitude: loc.coords.latitude,
-              longitude: loc.coords.longitude,
-            }), () => {
-              this.getWeather(loc.coords.latitude, loc.coords.longitude);
-            }
-        );
-      }
-    }
+    // const {status} = await Location.getPermissionsAsync();
+    // switch (status) {
+    //   case PermissionStatus.UNDETERMINED:
+    //     this.props.showLocationModalAction(this.getLocation);
+    //     break;
+    //   case PermissionStatus.DENIED:
+    //     this.setState({error: 'Permission to access location was denied'});
+    //     break;
+    //   case PermissionStatus.GRANTED:
+    //     this.getLocation().then();
+    //     break;
+    // }
   }
 
   componentDidMount() {
-    this.maybeDisplayWeatherModal().then();
+    getLocation().then( (coords : LatLong) => {
+      this.setState(() => ({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        }), () => {
+          this.getWeather(coords.latitude, coords.longitude);
+        }
+      );
+    }).catch( e => {
+      console.log(e);
+      this.setState({error: e})
+    });
   }
 
   componentWillUnmount() {
