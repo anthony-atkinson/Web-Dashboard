@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  app:
+  app_internal:
     image: local-web-dashboard
     user: node
     working_dir: /home/node/app
@@ -9,7 +9,19 @@ services:
     environment:
       - NODE_ENV=production
     volumes:
-      - /var/share/backgrounds:/home/node/app/public/images/backgrounds
+      - /var/share/backgrounds/internal:/home/node/app/public/images/backgrounds
     ports:
       - "4000:4000"
+    command: node nodejs/index.js
+  app_public:
+    image: local-web-dashboard
+    user: node
+    working_dir: /home/node/app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - /var/share/backgrounds/public:/home/node/app/public/images/backgrounds
+    ports:
+      - "4001:4000"
     command: node nodejs/index.js
