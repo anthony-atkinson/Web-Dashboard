@@ -7,6 +7,7 @@ import Slideshow from "../../components/Slideshow";
 import Weather from "../../components/Weather";
 
 export default function HomeScreen() {
+  document.title = 'Wallpaper Clock';
   const [bottomRowLeft, setBottomRowLeft] = useState<any>();
 
   const handleChildAction = (action : string) => {
