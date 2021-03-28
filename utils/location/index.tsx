@@ -11,15 +11,7 @@ export class LatLong {
   }
 }
 
-function handleBrowser() {
-  return new Promise<LatLong>((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition((loc) => {
-      resolve(new LatLong(loc.coords.latitude, loc.coords.longitude));
-    }, reject, { enableHighAccuracy: false })
-  });
-}
-
-async function handleEverythingElse() {
+export async function getLocation() : Promise<LatLong> {
   const {status} = await Location.requestPermissionsAsync();
   if (status !== 'granted') {
     throw 'Permission to access location was denied';
@@ -28,14 +20,5 @@ async function handleEverythingElse() {
         || await Location.getCurrentPositionAsync()
     );
     return new LatLong(loc.coords.latitude, loc.coords.longitude);
-  }
-}
-
-export async function getLocation() : Promise<LatLong> {
-  switch (Platform.OS) {
-    case 'web':
-      return await handleBrowser();
-    default:
-      return await handleEverythingElse();
   }
 }

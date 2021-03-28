@@ -19,14 +19,14 @@ export default StyleSheet.create({
   },
   bottomRowButtons: {
     bottom: 15,
-    left: 15,
+    // left: 15,
     right: 15,
     padding: 0,
     paddingHorizontal: 10,
     minHeight: 100,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: 'rgba(0, 0, 0, 0.60)',
+    backgroundColor: 'rgba(0, 0, 0, 0.75)',
     borderColor: Colors.RED,
     borderStyle: "solid",
     borderWidth: 2,
@@ -41,7 +41,4 @@ export default StyleSheet.create({
     marginTop: 10,
     marginBottom: -10,
   },
-  weather: {
-    // left: 0,
-  }
 });
