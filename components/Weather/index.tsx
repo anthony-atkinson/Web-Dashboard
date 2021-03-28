@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {View, Image} from 'react-native';
+import {Image, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {AllInOneWeather, State} from "./models";
 import {plainToClass} from "class-transformer";
 import styles from "./styles";
 import {format} from "date-fns";
-import * as Location from 'expo-location';
+import {getLocation, LatLong} from "../../utils/location";
 
 const BASE_WEATHER_URL = 'https://api.openweathermap.org/data/2.5';
 const API_KEY = '865e82a956a9bbd334c8562f971a5477';
@@ -31,25 +31,19 @@ export default class Weather extends Component<any, State> {
         });
   }
 
-  async getLocation() {
-    // Get the current position of the user
-    let {status} = await Location.requestPermissionsAsync();
-    if (status !== 'granted') {
-      this.setState({error: 'Permission to access location was denied'});
-    } else {
-      const loc = await Location.getCurrentPositionAsync();
-      this.setState(() => ({
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-          }), () => {
-            this.getWeather(loc.coords.latitude, loc.coords.longitude);
-          }
-      );
-    }
-  }
-
   componentDidMount() {
-    this.getLocation().then();
+    getLocation().then( (coords : LatLong) => {
+      this.setState(() => ({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        }), () => {
+          this.getWeather(coords.latitude, coords.longitude);
+        }
+      );
+    }).catch( e => {
+      console.log(e);
+      this.setState({error: e})
+    });
   }
 
   componentWillUnmount() {
