@@ -3,7 +3,7 @@ import {Image, View} from 'react-native';
 import {Text} from 'react-native-elements';
 import {ManualLocationProperties, State} from "./models";
 import styles from "./styles";
-import {format} from "date-fns";
+import {format, add} from "date-fns";
 import {getLocation, LatLong} from "../../utils/location";
 import ManualLocationModal from "./manualLocationModal";
 import {getGeoCodedLatLong, getWeather} from '../../utils/weather';
@@ -11,8 +11,6 @@ import * as Location from 'expo-location';
 import {PermissionStatus} from 'unimodules-permissions-interface'
 import RequestLocationModal from "./requestLocationModal";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 interface Props {
   updateParent: Function,
@@ -23,12 +21,16 @@ export default class Weather extends Component<Props, State> {
     this.props.updateParent('updateBottomRowLeft');
     console.log('Refreshing weather');
     getWeather(lat, long).then(weatherData => {
-      const nextUpdate = new Date(new Date().getTime() + FIVE_MINUTES_MS);
+      this.setState(() => ({
+        weather: weatherData,
+      }));
+    }).finally ( () => {
+      const nextUpdate = add(new Date(), {minutes: 5});
       console.log('Next weather update will be at ' +
           format(new Date(nextUpdate), "yyyy-MM-dd HH:mm:ss"));
       this.setState(() => ({
-        weather: weatherData,
-        weatherUpdateTimeout: setTimeout(() => this.getWeather(lat, long), FIVE_MINUTES_MS),
+        weatherUpdateTimeout: setTimeout(() => this.getWeather(lat, long),
+            (nextUpdate.getTime() - new Date().getTime()) ),
       }));
     });
   }

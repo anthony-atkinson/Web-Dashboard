@@ -5,7 +5,7 @@ import React, {useEffect, useState} from "react";
 import {format, add} from "date-fns";
 import Constants from "expo-constants";
 
-const FIVE_MINUTES = 5 * 60 * 1000;
+const FIVE_MINUTES_MS = 5 * 60 * 1000;
 const TEXT = {
   PAUSE_SLIDESHOW: ' PAUSE SLIDESHOW ',
   RESUME_SLIDESHOW: 'RESUME SLIDESHOW',
@@ -29,12 +29,14 @@ export default function Slideshow() {
         clearTimeout(bgTimeout);
         setBgTimeout(null);
       }
-      setNextBackgroundUpdate(add(new Date(), {minutes: 5}).getTime());
-      if (nextBackgroundUpdate !== -1) {
-        console.log(`Next Background refresh at ${format(new Date(nextBackgroundUpdate), "yyyy-MM-dd HH:mm:ss")}`);
-      }
-      setBgTimeout(setTimeout(updateBackground, FIVE_MINUTES));
-    }).catch(console.warn);
+    }).catch( (error) => {
+      console.warn(error);
+    }).finally( () => {
+      const nextUpdate = add(new Date(), {minutes: 5});
+      setNextBackgroundUpdate(nextUpdate.getTime());
+      console.log(`Next Background refresh at ${format(new Date(nextUpdate), "yyyy-MM-dd HH:mm:ss")}`);
+      setBgTimeout(setTimeout(updateBackground, (nextUpdate.getTime() - new Date().getTime()) ));
+    });
   };
 
   const changeSlideshowState = () => {
@@ -43,7 +45,7 @@ export default function Slideshow() {
       setSlideshowStateText(TEXT.RESUME_SLIDESHOW);
       // Need to Pause
       const newTimoutTime = nextBackgroundUpdate - new Date().getTime();
-      setTimeToUseForBackgroundUpdateTimeout((newTimoutTime > 0) ? newTimoutTime : FIVE_MINUTES);
+      setTimeToUseForBackgroundUpdateTimeout((newTimoutTime > 0) ? newTimoutTime : FIVE_MINUTES_MS);
       clearTimeout(bgTimeout);
       setBgTimeout(null);
     } else {
