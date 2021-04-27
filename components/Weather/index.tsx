@@ -6,7 +6,7 @@ import styles from "./styles";
 import {format, add} from "date-fns";
 import {getLocation, LatLong} from "../../utils/location";
 import ManualLocationModal from "./manualLocationModal";
-import {getGeoCodedLatLong, getWeather} from '../../utils/weather';
+import {getGeoCodedLatLong, getWeather as getWeatherData} from '../../utils/weather';
 import * as Location from 'expo-location';
 import {PermissionStatus} from 'unimodules-permissions-interface'
 import RequestLocationModal from "./requestLocationModal";
@@ -20,7 +20,7 @@ export default class Weather extends Component<Props, State> {
   getWeather(lat : number, long : number) {
     this.props.updateParent('updateBottomRowLeft');
     console.log('Refreshing weather');
-    getWeather(lat, long).then(weatherData => {
+    getWeatherData(lat, long).then(weatherData => {
       this.setState(() => ({
         weather: weatherData,
       }));
@@ -28,6 +28,9 @@ export default class Weather extends Component<Props, State> {
       const nextUpdate = add(new Date(), {minutes: 5});
       console.log('Next weather update will be at ' +
           format(new Date(nextUpdate), "yyyy-MM-dd HH:mm:ss"));
+      if (this.state.weatherUpdateTimeout) {
+        clearTimeout(this.state.weatherUpdateTimeout);
+      }
       this.setState(() => ({
         weatherUpdateTimeout: setTimeout(() => this.getWeather(lat, long),
             (nextUpdate.getTime() - new Date().getTime()) ),
@@ -114,16 +117,7 @@ export default class Weather extends Component<Props, State> {
       const {status} = await Location.getPermissionsAsync();
       switch (status) {
         case PermissionStatus.UNDETERMINED:
-          // There are some browsers that will always return this so we have to
-          // check out own variable as well to make sure we don't annoy the user
-          const modalAlreadyAcked = await AsyncStorage.getItem('LocationNeedAcked');
-          if (modalAlreadyAcked !== 'true') {
-            this.setState({
-              showLocReqModal: true
-            });
-          } else {
-            await this.getLocationInfo();
-          }
+          await this.getLocationInfo();
           break;
         case PermissionStatus.DENIED:
           console.log('DENIED');
