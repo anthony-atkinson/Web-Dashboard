@@ -26,7 +26,7 @@ export default class Weather extends Component<Props, State> {
       const nextUpdate = new Date(new Date().getTime() + FIVE_MINUTES_MS);
       console.log('Next weather update will be at ' +
           format(new Date(nextUpdate), "yyyy-MM-dd HH:mm:ss"));
-      this.setState((prevState) => ({
+      this.setState(() => ({
         weather: weatherData,
         weatherUpdateTimeout: setTimeout(() => this.getWeather(lat, long), FIVE_MINUTES_MS),
       }));
@@ -34,9 +34,14 @@ export default class Weather extends Component<Props, State> {
   }
 
   // Using that since the standard this isn't in scope when this is ran.
-  getLocationInfoAfterModal(that : Weather) {
-    AsyncStorage.setItem('LocationNeedAcked', 'true').then();
-    that.getLocationInfo();
+  getLocationInfoAfterModal(that : Weather, confirmed : boolean) {
+    if (confirmed) {
+      AsyncStorage.setItem('LocationNeedAcked', 'granted').then(() => {
+        that.maybeDisplayWeatherModal().then();
+      });
+    } else {
+      AsyncStorage.setItem('LocationNeedAcked', 'denied').then();
+    }
   }
 
   async handleManualLocationInfoGather() {
@@ -96,28 +101,37 @@ export default class Weather extends Component<Props, State> {
   }
 
   async maybeDisplayWeatherModal() {
-    const {status} = await Location.getPermissionsAsync()
-    switch (status) {
-      case PermissionStatus.UNDETERMINED:
-        // There are some browsers that will always return this so we have to
-        // check out own variable as well to make sure we don't annoy the user
-        const modalAlreadyAcked = await AsyncStorage.getItem('LocationNeedAcked');
-        if (modalAlreadyAcked !== 'true') {
-          this.setState({
-            showLocReqModal: true
-          });
-        } else {
-          this.getLocationInfo();
-        }
-        break;
-      case PermissionStatus.DENIED:
-        console.log('DENIED');
-        this.setState({error: 'Permission to access location was denied'});
-        break;
-      case PermissionStatus.GRANTED:
-        console.log('GRANTED');
-        this.getLocationInfo();
-        break;
+    // There are some browsers that will always return this so we have to
+    // check out own variable as well to make sure we don't annoy the user
+    const modalAlreadyAcked = await AsyncStorage.getItem('LocationNeedAcked');
+    if (modalAlreadyAcked === null) {
+      this.setState({
+        showLocReqModal: true
+      });
+    } else if (modalAlreadyAcked === 'granted') {
+      const {status} = await Location.getPermissionsAsync();
+      switch (status) {
+        case PermissionStatus.UNDETERMINED:
+          // There are some browsers that will always return this so we have to
+          // check out own variable as well to make sure we don't annoy the user
+          const modalAlreadyAcked = await AsyncStorage.getItem('LocationNeedAcked');
+          if (modalAlreadyAcked !== 'true') {
+            this.setState({
+              showLocReqModal: true
+            });
+          } else {
+            await this.getLocationInfo();
+          }
+          break;
+        case PermissionStatus.DENIED:
+          console.log('DENIED');
+          this.setState({error: 'Permission to access location was denied'});
+          break;
+        case PermissionStatus.GRANTED:
+          console.log('GRANTED');
+          await this.getLocationInfo();
+          break;
+      }
     }
   }
 
@@ -166,7 +180,8 @@ export default class Weather extends Component<Props, State> {
           { this.state?.showLocReqModal ? (
               <View>
                 <RequestLocationModal
-                    runOnComplete={ () => this.getLocationInfoAfterModal(this)}
+                    runOnComplete={ () => this.getLocationInfoAfterModal(this, true)}
+                    runOnCancel={ () => this.getLocationInfoAfterModal(this, false)}
                     showModal={this.state.showLocReqModal}
                 />
               </View>

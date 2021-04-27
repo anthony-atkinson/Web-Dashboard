@@ -1,14 +1,11 @@
-import {View, Image, Text, TouchableHighlight, StyleSheet, Picker} from 'react-native';
-import React, { useState, useEffect } from 'react';
-import { Button, Modal } from 'react-bootstrap';
-import {ManualLocationProperties} from "./models";
-import Colors from "../../constants/colors";
-import {Input} from "react-native-elements";
-import DropDownPicker from 'react-native-dropdown-picker';
+import {StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Button, Modal} from 'react-bootstrap';
 
 interface ModalProps {
   showModal: boolean,
-  runOnComplete: Function
+  runOnCancel: Function,
+  runOnComplete: Function,
 }
 
 export default function RequestLocationModal(props : ModalProps) {
@@ -20,6 +17,7 @@ export default function RequestLocationModal(props : ModalProps) {
 
   const handleClose = ( ) => {
     setShowModal(false);
+    props.runOnCancel();
   };
 
   const handleOkay = () => {
